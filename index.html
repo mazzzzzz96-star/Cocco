@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E3B2C">
+<meta name="color-scheme" content="light dark">
+<title>نصب CoccoBye</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--tx:#101211;--mu:#6b726d;--ln:#e7e9e7;--fl:#f3f4f2;--ac:#0E3B2C}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0d0c;--tx:#f1f3f0;--mu:#98a29b;--ln:#232826;--fl:#171b19;--ac:#6fcf9f}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Vazirmatn,system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--tx);line-height:1.8;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:520px;margin:0 auto;padding:36px 18px 48px}
+.brand{display:flex;flex-direction:column;align-items:center;color:var(--ac);margin-bottom:18px}
+.brand img{width:84px;height:84px;border-radius:20px}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:34px;direction:ltr;color:var(--tx);margin-top:6px}.logo i{color:var(--ac)}
+h1{font-size:19px;text-align:center;margin:0}p{color:var(--mu);font-size:14.5px;margin:6px 0}
+.pick{display:flex;gap:12px;margin:22px 0 14px}
+.pick button{flex:1;font:inherit;font-weight:700;font-size:16px;color:var(--tx);background:var(--fl);border:1.5px solid transparent;border-radius:16px;padding:18px 8px;cursor:pointer}
+.pick button.on{border-color:var(--ac);color:var(--ac)}
+.panel{display:none;background:var(--fl);border-radius:18px;padding:6px 18px 18px}.panel.on{display:block}
+ol{margin:10px 0;padding-inline-start:22px}li{margin:10px 0}
+.ic{width:20px;height:20px;vertical-align:-4px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:block;width:100%;font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px;background:var(--tx);color:var(--bg);text-align:center;cursor:pointer;margin-top:12px;text-decoration:none}
+.btn.o{background:none;border:1px solid var(--ln);color:var(--tx);font-weight:500}
+.hide{display:none!important}.note{font-size:13px}
+</style>
+</head>
+<body>
+<main>
+<div class="brand"><img src="icons/icon-192.png" alt=""><div class="logo">Cocco<i>Bye</i></div></div>
+<h1>نصب اپ روی گوشی</h1>
+<p style="text-align:center">بدون فروشگاه اپ، مستقیم روی صفحه‌ی اصلی گوشی‌ات. گوشی‌ات را انتخاب کن:</p>
+<div class="pick"><button id="b-ios">آیفون</button><button id="b-and">اندروید</button></div>
+
+<div class="panel" id="p-ios">
+<ol>
+<li>این صفحه را حتماً با <b>Safari</b> باز کن (نه کروم، نه داخل تلگرام یا اینستاگرام).</li>
+<li>دکمه‌ی اشتراک‌گذاری را بزن: مربعی با فلش رو به بالا
+<svg class="ic" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M6 11H5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1h-1"/></svg>
+(پایین صفحه یا کنار نوار آدرس).</li>
+<li>منو را بالا بکش و <b>Add to Home Screen</b> (افزودن به صفحه‌ی اصلی) را بزن.</li>
+<li>بالا سمت چپ یا راست <b>Add</b> را بزن.</li>
+</ol>
+<p>آیکون CoccoBye روی صفحه‌ی اصلی ظاهر می‌شود. از این به بعد از همان‌جا باز کن.</p>
+</div>
+
+<div class="panel" id="p-and">
+<button class="btn hide" id="inst">نصب اپ</button>
+<p>اگر دکمه‌ی بالا را نمی‌بینی، دستی نصب کن:</p>
+<ol>
+<li>این صفحه را با <b>Chrome</b> باز کن. اگر از تلگرام آمده‌ای، منوی <b>⋮</b> را بزن و Open in browser را انتخاب کن.</li>
+<li>منوی <b>⋮</b> (سه نقطه‌ی بالای صفحه) را بزن.</li>
+<li><b>Install app</b> (نصب برنامه) یا <b>Add to Home screen</b> را بزن.</li>
+<li>در پنجره‌ی بعد <b>Install</b> یا <b>Add</b> را بزن.</li>
+</ol>
+<p>آیکون CoccoBye به صفحه‌ی اصلی و لیست برنامه‌ها اضافه می‌شود.</p>
+</div>
+
+<a class="btn o" href="app.html" style="margin-top:22px">بدون نصب، همین حالا در مرورگر باز کن</a>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)location.replace('app.html');
+function pick(k){['ios','and'].forEach(x=>{$('#b-'+x).classList.toggle('on',x===k);$('#p-'+x).classList.toggle('on',x===k)})}
+$('#b-ios').onclick=()=>pick('ios');$('#b-and').onclick=()=>pick('and');
+const ua=navigator.userAgent;if(/iPhone|iPad|iPod/.test(ua))pick('ios');else if(/Android/.test(ua))pick('and');
+let dp=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('#inst').classList.remove('hide')});
+$('#inst').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#inst').classList.add('hide')};
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>

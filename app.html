@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E3B2C">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CoccoBye">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>CoccoBye</title>
+<!-- For GitHub/server: self-host the fonts (put .woff2 files in /fonts and use @font-face) -->
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#fff;--tx:#101211;--mu:#6b726d;--ln:#e7e9e7;--fl:#f3f4f2;--ac:#0E3B2C}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0d0c;--tx:#f1f3f0;--mu:#98a29b;--ln:#232826;--fl:#171b19;--ac:#6fcf9f}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font-family:Vazirmatn,system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--tx);overflow:hidden;line-height:1.7}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+[dir=rtl] .fl{transform:scaleX(-1)}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+.logo{font-family:'Cormorant Garamond',serif;font-weight:600;direction:ltr;letter-spacing:.5px}.logo i{color:var(--ac)}
+#splash{position:fixed;inset:0;z-index:100;background:#0E3B2C;color:#F4F1E8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:opacity .5s}
+#splash svg{width:92px;height:92px;animation:pop 1s both}#splash .logo{font-size:50px;animation:pop 1s .2s both}#splash .logo i{color:#F4F1E8}
+#splash small{letter-spacing:5px;opacity:.7;animation:pop 1s .4s both}
+#splash .ld{width:110px;height:2px;background:rgba(255,255,255,.18);margin-top:18px;overflow:hidden}#splash .ld b{display:block;height:100%;background:#F4F1E8;animation:ld 2.2s forwards}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}}@keyframes ld{from{width:0}to{width:100%}}
+#top{position:fixed;top:0;left:0;right:0;height:calc(48px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 16px 0;display:flex;align-items:center;justify-content:space-between;background:var(--bg);z-index:10;border-bottom:1px solid var(--ln)}
+#top h1{margin:0;font-size:17px;font-weight:700}#top .logo{font-size:24px}
+#lang{font-size:13.5px;color:var(--mu)}
+main{height:100dvh;overflow:auto;padding:calc(48px + env(safe-area-inset-top)) 0 calc(60px + env(safe-area-inset-bottom))}
+.page{display:none;max-width:560px;margin:0 auto;padding:8px 16px 24px}.page.on{display:block}
+#tabs{position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:var(--bg);border-top:1px solid var(--ln);display:flex;z-index:10}
+#tabs button{flex:1;display:flex;align-items:center;justify-content:center;color:var(--mu)}
+#tabs button.on{color:var(--ac)}
+#tabs svg{width:26px;height:26px;stroke-width:1.8}
+h2{margin:0;font-size:20px;font-weight:700}h3{margin:22px 0 6px;font-size:14px;font-weight:500;color:var(--mu)}
+p{margin:4px 0;color:var(--mu);font-size:14.5px}
+.sci{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;direction:ltr;text-align:start;margin:0;color:var(--mu)}
+.row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--ln);cursor:pointer}
+.row .g{flex:1;min-width:0}.row b{font-weight:500;display:block}.row p{margin:0}
+.row img.t{width:52px;height:52px;border-radius:10px;object-fit:cover;background:var(--fl)}
+.ic{width:44px;height:44px;border-radius:50%;background:var(--fl);display:flex;align-items:center;justify-content:center;flex:none}
+.btn{display:block;width:100%;border-radius:12px;padding:12px;background:var(--tx);color:var(--bg);font-weight:700;text-align:center;margin-top:10px}
+.btn:disabled{opacity:.3}.btn.o{background:none;border:1px solid var(--ln);color:var(--tx);font-weight:500}
+.lk{color:var(--ac);font-size:14px;padding:6px 0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--ln);border-radius:18px;padding:3px 14px;font-size:14px;color:var(--mu)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+input{width:100%;font:inherit;color:var(--tx);background:var(--fl);border:0;border-radius:10px;padding:11px 14px;margin:5px 0;outline:0}
+/* home */
+#v-home{min-height:calc(100dvh - 150px - env(safe-area-inset-top) - env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:center;gap:22px}
+.brand{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ac)}.brand svg{width:54px;height:54px}.brand .logo{font-size:34px;color:var(--tx)}
+.fld{background:var(--fl);border-radius:28px;padding:8px}
+.thr{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px}
+.thr div{position:relative;flex:none;width:60px;height:60px}.thr img{width:100%;height:100%;border-radius:12px;object-fit:cover}
+.thr button{position:absolute;top:-5px;right:-5px;width:20px;height:20px;border-radius:50%;background:var(--tx);color:var(--bg);display:flex;align-items:center;justify-content:center}.thr button svg{width:12px;height:12px;stroke-width:2.4}
+.frow{display:flex;align-items:center;gap:6px}
+.frow input{background:none;margin:0;padding:8px 4px;font-size:16px}
+.rb{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;position:relative}
+.rb.d{background:var(--tx);color:var(--bg)}.rb.d:disabled{opacity:.25}
+.pw{position:relative}
+.menu{position:absolute;bottom:calc(100% + 10px);inset-inline-start:0;min-width:200px;background:var(--bg);border:1px solid var(--ln);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden;z-index:5}
+.menu button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;text-align:start}.menu button+button{border-top:1px solid var(--ln)}
+.menu .ck{margin-inline-start:auto;color:var(--ac)}
+.cnt{font-size:12px;color:var(--mu);text-align:center}
+.tip{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;font-size:13px;color:var(--mu);text-align:center;min-height:22px}.tip svg{width:16px;height:16px}
+/* process */
+.scan{position:relative;width:200px;height:200px;margin:40px auto 20px;border-radius:20px;overflow:hidden;background:#0E3B2C}.scan img{width:100%;height:100%;object-fit:cover;opacity:.8}
+.scan:after{content:"";position:absolute;left:0;right:0;height:3px;background:#fff;box-shadow:0 0 16px 5px #fff;animation:sw 1.5s ease-in-out infinite alternate}
+@keyframes sw{from{top:0}to{top:calc(100% - 3px)}}
+.bar{height:3px;background:var(--ln);margin:14px auto 0;max-width:240px;overflow:hidden}.bar b{display:block;height:100%;width:0;background:var(--ac);transition:width .3s}
+.ctr{text-align:center}
+ul{padding-inline-start:20px;margin:4px 0;color:var(--mu);font-size:14.5px}
+.note{font-size:12.5px;color:var(--mu);margin-top:16px}
+.lockv{text-align:center;padding:70px 10px;color:var(--mu)}.lockv svg{width:40px;height:40px;color:var(--tx)}
+.late{color:#c0392b}
+#sheetBg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:none}#sheetBg.on{display:block}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .25s;max-width:560px;margin:0 auto}#sheet.on{transform:none}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);border-radius:20px;padding:7px 18px;font-size:14px;z-index:50;display:none}
+details{border-bottom:1px solid var(--ln)}summary{padding:14px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between}summary::-webkit-details-marker{display:none}
+.grid2{display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.pc{background:var(--fl);border-radius:18px;overflow:hidden;display:flex;flex-direction:row;align-items:stretch;cursor:pointer}
+.pc .im{width:92px;aspect-ratio:1/1;flex:none}.pc .im svg{width:36px;height:36px}
+.im{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(14,59,44,.10),rgba(14,59,44,.03));color:var(--ac);overflow:hidden}
+.im svg{width:52px;height:52px;stroke-width:1.2;opacity:.55}
+.im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.im.hero{aspect-ratio:16/10;border-radius:18px;margin:6px 0 10px}.im.hero svg{width:72px;height:72px}
+.pc .tx{padding:10px 14px;display:flex;flex-direction:column;justify-content:center;gap:1px;flex:1;min-width:0}.pc .tx b{font-weight:700;font-size:15px;line-height:1.5}
+.pc .mu{font-size:12.5px;color:var(--mu)}
+.ob{margin:0 12px 12px;border-radius:10px;padding:7px;background:var(--tx);color:var(--bg);font-weight:700;font-size:14px;text-align:center}
+.sh{font-size:18px;font-weight:700;margin:26px 0 8px;color:var(--tx)}.sh:first-child{margin-top:6px}
+.cartb{position:relative;display:flex;padding:2px}.bdg{position:absolute;top:-6px;inset-inline-end:-8px;min-width:18px;height:18px;border-radius:9px;background:var(--ac);color:var(--bg);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div id="splash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"><use href="#bug"/></svg><div class="logo">Cocco<i>Bye</i></div><small>CITRUS PROTECTION</small><div class="ld"><b></b></div></div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="bug" viewBox="0 0 24 24"><ellipse cx="12" cy="13.1" rx="4.9" ry="7.1"/><path d="M7.3 10.9Q12 12.75 16.7 10.9M7.1 13.9Q12 15.75 16.9 13.9M7.9 16.9Q12 18.75 16.1 16.9M7.5 10.1L3.75 7.9M7.1 13.1H3M7.5 16.5L3.75 18.75M16.5 10.1L20.25 7.9M16.9 13.1H21M16.5 16.5L20.25 18.75M10.9 6.4Q10.1 3.75 8.25 2.6M13.1 6.4Q13.9 3.75 15.75 2.6"/></symbol>
+<symbol id="cart" viewBox="0 0 24 24"><path d="M3 4h2l2.2 11h10.6L20 7H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></symbol>
+<symbol id="herb" viewBox="0 0 24 24"><path d="M4 20C4 11 9 5 20 4c0 11-6 16-16 16zM4 20L12 12"/><path d="M19 16.5v5M16.5 19h5"/></symbol>
+<symbol id="hist" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="clip" viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 4.5V3h6v1.5M8.5 12.5l2.5 2.5 4.5-5"/></symbol>
+<symbol id="bottle" viewBox="0 0 24 24"><path d="M9.5 2.5h5M10 2.5V6l-3 3v11.5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9l-3-3V2.5M7 13h10M7 17h10"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4"/><path d="M4 20c1-4 4-6 8-6s7 2 8 6"/></symbol>
+<symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="up" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6"/></symbol>
+<symbol id="cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+<symbol id="img" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M4 17l5-5 4 4 3-3 4 4"/></symbol>
+<symbol id="pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+<symbol id="bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></symbol>
+<symbol id="ok" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="fwd" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="back" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="send" viewBox="0 0 24 24"><path d="M4 12v7h16v-7M12 16V4M8 8l4-4 4 4"/></symbol>
+</defs></svg>
+
+<header id="top"><div id="hl"></div><div style="display:flex;gap:16px;align-items:center"><span id="hx"></span><button id="lang" data-act="lang">EN</button></div></header>
+<main>
+<section class="page on" id="p-scan">
+<div id="v-home">
+ <div class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".83" stroke-linecap="round"><use href="#bug"/></svg><div class="logo">Cocco<i>Bye</i></div></div>
+ <div>
+  <div class="fld">
+   <div class="thr hide" id="thr"></div>
+   <div class="frow">
+    <div class="pw"><button class="rb" data-act="plus" aria-label="add"><svg class="i"><use href="#plus"/></svg></button>
+     <div class="menu hide" id="addMenu">
+      <button data-act="cam"><svg class="i"><use href="#cam"/></svg><span data-i="s_cam"></span></button>
+      <button data-act="gal"><svg class="i"><use href="#img"/></svg><span data-i="s_gal"></span></button>
+      <button data-act="loc"><svg class="i"><use href="#pin"/></svg><span data-i="loc"></span><svg class="i ck hide" id="locck"><use href="#ok"/></svg></button>
+     </div></div>
+    <input id="q" data-p="ph" autocomplete="off" enterkeyhint="search">
+    <button class="rb d" id="sendBtn" data-act="go" aria-label="go" disabled><svg class="i"><use href="#up"/></svg></button>
+   </div>
+  </div>
+  <div class="cnt" id="cnt"></div>
+  <div class="tip" id="tip"></div>
+  <div id="sr"></div>
+ </div>
+</div>
+<div id="v-proc" class="hide ctr"><div class="scan"><img id="scanimg" alt=""></div><h2 id="stg" style="font-size:17px;font-weight:500"></h2><div class="bar"><b id="bar"></b></div></div>
+<div id="v-res" class="hide"><div id="res"></div></div>
+<input type="file" id="fCam" accept="image/*" capture="environment" class="hide"><input type="file" id="fGal" accept="image/*" multiple class="hide">
+</section>
+<section class="page" id="p-pests"><div id="pestBox"></div></section>
+<section class="page" id="p-prod"><div id="prodBox"></div></section>
+<section class="page" id="p-hist"><div id="histBox"></div></section>
+<section class="page" id="p-me"><div id="meBox"></div></section>
+</main>
+<nav id="tabs">
+<button data-go="me" aria-label="profile"><svg class="i"><use href="#user"/></svg></button>
+<button data-go="pests" aria-label="pests"><svg class="i"><use href="#bug"/></svg></button>
+<button data-go="scan" class="on" aria-label="detect"><svg class="i"><use href="#scan"/></svg></button>
+<button data-go="prod" aria-label="control"><svg class="i"><use href="#herb"/></svg></button>
+<button data-go="hist" aria-label="activity"><svg class="i"><use href="#clip"/></svg></button>
+</nav>
+<div id="sheetBg"></div><div id="sheet"></div><div id="toast"></div>
+
+<!-- LIBRARY DATA: kept separate on purpose. In production serve it from your server only to logged-in users, by access level, and delete this block. -->
+<script type="application/json" id="lib-data">
+{"v":"2026.10.2","updated":"2026-10-16","items":[
+{"i":0,"life":{"fa":"ماده‌ها تخم را در کیسه‌ی پنبه‌ای می‌گذارند و پوره‌های متحرک با باد پخش می‌شوند.","en":"Females lay eggs in a cottony sac; mobile crawlers spread by wind."},"enemy":{"fa":"کفشدوزک Rodolia cardinalis و مگس Cryptochaetum iceryae.","en":"Rodolia cardinalis ladybird and Cryptochaetum iceryae fly."},"ctl":{"fa":["شاخه‌های به‌شدت آلوده را هرس و از باغ خارج کن.","مورچه‌ها را کنترل کن؛ از شپشک‌ها محافظت می‌کنند.","سمپاشی را در مرحله‌ی پوره‌های متحرک انجام بده."],"en":["Prune heavily infested twigs and remove them from the orchard.","Control ants; they protect scale insects.","Spray at the mobile crawler stage."]},"prods":[1,2,0]},
+{"i":1,"life":{"fa":"پوره‌های متحرک پس از استقرار زیر سپر ثابت می‌شوند.","en":"Crawlers settle and stay fixed under a shield."},"enemy":{"fa":"زنبورهای پارازیتوئید جنس Aphytis.","en":"Parasitoid wasps of the genus Aphytis."},"ctl":{"fa":["سمپاشی را با ظهور پوره‌های متحرک و پیش از تشکیل سپر انجام بده.","تهویه‌ی تاج درخت را با هرس بهتر کن."],"en":["Spray when crawlers appear, before the shield forms.","Improve canopy airflow by pruning."]},"prods":[0,1,2,3]},
+{"i":2,"life":{"fa":"سپر دراز صدفی از پوره‌ها و ماده‌های بالغ محافظت می‌کند.","en":"The elongated shield protects nymphs and adult females."},"enemy":{"fa":"زنبور Aphytis lepidosaphes.","en":"The wasp Aphytis lepidosaphes."},"ctl":{"fa":["پوره‌ها را در دوره‌ی فعالیتشان هدف بگیر.","آلودگی میوه‌ها را هر چند هفته بررسی کن."],"en":["Target the crawlers during their active period.","Check fruit for infestation every few weeks."]},"prods":[0,1,2,3]},
+{"i":3,"life":{"fa":"بدن نرم و بدون سپر سخت است و عسلک ترشح می‌کند.","en":"Soft-bodied without a hard shield; secretes honeydew."},"enemy":{"fa":"زنبورهای Metaphycus helvolus و Coccophagus.","en":"Metaphycus helvolus and Coccophagus wasps."},"ctl":{"fa":["مورچه‌ها را کنترل کن.","عسلک و دوده را بشوی و پوره‌ها را هدف بگیر."],"en":["Control ants.","Wash off honeydew and sooty mould and target the crawlers."]},"prods":[0,1,2]},
+{"i":4,"life":{"fa":"پوشش مومی ضخیم روی شاخه تشکیل می‌دهد.","en":"Forms a thick waxy cover on twigs."},"enemy":{"fa":"زنبور Scutellista caerulea.","en":"The wasp Scutellista caerulea."},"ctl":{"fa":["شاخه‌های آلوده را قطع کن.","پوره‌ها را در دوره‌ی فعالیتشان هدف بگیر."],"en":["Cut off infested twigs.","Target the crawlers during their active period."]},"prods":[0,1,3]}]}
+</script>
+
+<script>
+const API='';/* set to your AI endpoint: POST multipart "images" -> {i:pestIndex,c:confidence} */
+const MAX=10;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const ls={g:(k,d)=>{try{return JSON.parse(localStorage.getItem('cb_'+k))??d}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem('cb_'+k,JSON.stringify(v))}catch(e){}}};
+let lang=ls.g('lang','en'),user=ls.g('user',null),hist=ls.g('hist',[]),rems=ls.g('rem',[]),orders=ls.g('ord',[]),lib=JSON.parse($('#lib-data').textContent);
+let files=[],result=null,page='scan',pv=null,pd=null,af='hist',moreP=false,moreD=false,cart=ls.g('cart',[]),cn='',cp='',useLoc=false,reg=false;
+const T={
+fa:{scan:'تشخیص',pests:'آفت‌ها',prod:'نسخه',hist:'فعالیت',me:'پروفایل',
+ph:'جستجو یا افزودن عکس',s_cam:'دوربین',s_gal:'گالری',loc:'موقعیت مکانی',tip_h:'نکته‌های عکس',tips:['بیماری را نزدیک و واضح بگیر.','نور روز بهتر از فلاش است.','یک عکس کلی و چند عکس نزدیک بگیر.'],
+cnt:n=>`${n}/${MAX}`,up:(i,n)=>`در حال آپلود ${i} از ${n}`,det:'در حال تشخیص…',none:'نتیجه‌ای پیدا نشد',mean:'منظورت این است؟',chat_err:'پاسخی دریافت نشد. دوباره تلاش کن.',
+conf:'اطمینان',det_b:'اطلاعات آفت',prod_b:'روش‌های کنترل',send:'ارسال به کارشناس',again:'تشخیص جدید',demo:'نتیجه‌ی نمایشی است. قبل از سم‌پاشی با کارشناس کشاورزی مشورت کن.',
+life:'چرخه‌ی زندگی',enemy:'دشمنان طبیعی',need:'نیازمند سطح کارشناس',lock:'برای دیدن این بخش وارد شو',unlock:'برای دیدن توضیحات کامل و معرفی راهکارها، محصولات و داروها وارد حساب شو',ctl:'راهکارهای کنترل',rel:'محصولات',lock_p:'اطلاعات آفت‌ها عمومی نیست و بر اساس سطح دسترسی نشان داده می‌شود.',
+all:'همه',meds:'داروها',add_all:'افزودن همه به نسخه',ord:'افزودن به نسخه',ord_h:'ثبت سفارش',qty:'تعداد',name:'نام',phone:'شماره تماس',ord_ok:'سفارش ثبت شد',ord_demo:'پرداخت و ارسال بعد از اتصال فروشگاه فعال می‌شود.',nop:'محصولی نیست',cart:'نسخه',add_ok:'به نسخه اضافه شد',ord_login:'برای سفارش وارد شو',cart_empty:'نسخه خالی است. با دکمه‌ی + دارو اضافه کن.',submit:'ثبت سفارش',more:'بیشتر',more_login:'برای دیدن بیشتر، کلید دسترسی را وارد کن',more_msg:'این نسخه آزمایشی است و بعداً بقیه‌ی آیتم‌ها اینجا نمایش داده می‌شود.',hist_l:'تاریخچه',l_key:'کلید دسترسی',lab:'طبق برچسب محصول، با تجهیزات ایمنی و با نظر کارشناس کشاورزی استفاده کن.',
+h_empty:'تاریخچه خالی است',h_clear:'پاک کردن همه',
+rm:'یادآور سم‌پاشی',rm_n:'یادداشت',rm_add:'افزودن',orders:'سفارش‌ها',about:'درباره',a_p:'CoccoBye با هوش مصنوعی شپشک‌ها و آفت‌های مرکبات را از روی عکس شناسایی می‌کند و راه مبارزه را پیشنهاد می‌دهد. این نسخه نمایشی است.',
+l_in:'ورود',l_reg:'ثبت‌نام',l_em:'ایمیل',l_pw:'رمز عبور',l_toReg:'حساب نداری؟ ثبت‌نام',l_toIn:'حساب داری؟ وارد شو',l_out:'خروج',l_why:'برای دیدن اطلاعات کامل و ثبت اطلاعات جدید، کلید دسترسی خودت را وارد کن.',l_bad:'کلید معتبر نیست',r1:'سطح کاربر',r2:'سطح کارشناس',r3:'سطح مدیر',lg:'زبان',edit:'ویرایش',ld_model:'در حال بارگذاری مدل هوش مصنوعی…',an:(i,n)=>`در حال بررسی عکس ${i} از ${n}`,need_login:'برای تشخیص، ابتدا کلید دسترسی را وارد کن',err_ai:'تشخیص انجام نشد. اتصال اینترنت را بررسی کن و دوباره تلاش کن.',l_nolib:'کتابخانه پیدا نشد. پوشه‌ی lib را کنار index.html بگذار.',chk:'در حال بررسی کلید…',alt:'شبیه‌ترین بعدی',lowc:'شباهت به عکس‌های مرجع کم است؛ نتیجه ممکن است اشتباه باشد.',notes:'یادداشت‌ها'},
+en:{scan:'Detect',pests:'Pests',prod:'Prescription',hist:'Activity',me:'Profile',
+ph:'Search or add a photo',s_cam:'Camera',s_gal:'Gallery',loc:'Location',tip_h:'Photo tips',tips:['Shoot the disease close and sharp.','Daylight beats flash.','Take one overview and a few close-ups.'],
+cnt:n=>`${n}/${MAX}`,up:(i,n)=>`Uploading ${i} of ${n}`,det:'Detecting…',none:'No results',mean:'Did you mean:',chat_err:'No answer received. Try again.',
+conf:'Confidence',det_b:'Pest info',prod_b:'Control options',send:'Send to expert',again:'New detection',demo:'This is a demo result. Check with an agricultural expert before spraying.',
+life:'Life cycle',enemy:'Natural enemies',need:'Requires expert level',lock:'Sign in to see this',unlock:'Sign in to see the full description and the control methods, products and drugs',ctl:'Control methods',rel:'Products',lock_p:'Pest information is not public and is shown by your access level.',
+all:'All',meds:'Medicines',add_all:'Add all to prescription',ord:'Add to prescription',ord_h:'Place order',qty:'Quantity',name:'Name',phone:'Phone',ord_ok:'Order saved',ord_demo:'Payment and shipping activate once a store is connected.',nop:'No products',cart:'Prescription',add_ok:'Added to prescription',ord_login:'Sign in to order',cart_empty:'Your prescription is empty. Tap + to add items.',submit:'Place order',more:'More',more_login:'Enter your access key to see more',more_msg:'This is an experimental version; the remaining items will be shown here later.',hist_l:'History',l_key:'Access key',lab:'Follow the product label, wear protective gear and consult an agricultural expert.',
+h_empty:'History is empty',h_clear:'Clear all',
+rm:'Spray reminders',rm_n:'Note',rm_add:'Add',orders:'Orders',about:'About',a_p:'CoccoBye uses AI to identify scale insects and citrus pests from a photo and suggests how to control them. This version is a demo.',
+l_in:'Sign in',l_reg:'Sign up',l_em:'Email',l_pw:'Password',l_toReg:'No account? Sign up',l_toIn:'Have an account? Sign in',l_out:'Sign out',l_why:'Enter your access key to see full information and add new data.',l_bad:'Invalid key',r1:'User level',r2:'Expert level',r3:'Admin level',lg:'Language',edit:'Edit',ld_model:'Loading AI model…',an:(i,n)=>`Analyzing photo ${i} of ${n}`,need_login:'Enter your access key to detect',err_ai:'Detection failed. Check your internet connection and try again.',l_nolib:'Library not found. Put the lib folder next to index.html.',chk:'Checking key…',alt:'Next closest',lowc:'Low similarity to the reference photos; the result may be wrong.',notes:'Notes'}};
+const t=k=>T[lang][k];
+const PESTS=[
+{n:{fa:'شپشک پنبه‌ای استرالیایی',en:'Cottony cushion scale'},s:'Icerya purchasi',d:{fa:'کیسه‌ی تخم سفید و پنبه‌ای روی شاخه و برگ.',en:'White cottony egg sacs on twigs and leaves.'},c:{fa:'هرس شاخه‌های آلوده و سمپاشی در مرحله‌ی پوره‌های متحرک.',en:'Prune infested twigs and spray at the crawler stage.'}},
+{n:{fa:'شپشک سپردار اسپانیایی',en:'Spanish red scale'},s:'Chrysomphalus dictyospermi',d:{fa:'سپر گرد قهوه‌ای‌مایل به قرمز روی برگ و میوه.',en:'Round reddish-brown shields on leaves and fruit.'},c:{fa:'سمپاشی هم‌زمان با ظهور پوره‌ها، پیش از تشکیل سپر.',en:'Spray when crawlers appear, before the shield forms.'}},
+{n:{fa:'شپشک کومایی مرکبات',en:'Purple scale'},s:'Lepidosaphes beckii',d:{fa:'سپر دراز و صدفی بنفش‌قهوه‌ای روی پوست میوه.',en:'Elongated mussel-shaped shields on fruit rind.'},c:{fa:'هدف‌گیری پوره‌ها در دوره‌ی فعالیتشان.',en:'Target the crawlers during their active period.'}},
+{n:{fa:'شپشک نرم قهوه‌ای',en:'Brown soft scale'},s:'Coccus hesperidum',d:{fa:'پهن و نرم، همراه عسلک و قارچ دوده‌ای سیاه.',en:'Flat, soft body with honeydew and black sooty mould.'},c:{fa:'کنترل مورچه‌ها و سمپاشی در مرحله‌ی پوره.',en:'Control ants and spray at the crawler stage.'}},
+{n:{fa:'شپشک مومی چینی',en:'Chinese wax scale'},s:'Ceroplastes sinensis',d:{fa:'پوشش مومی سفید و ضخیم روی شاخه.',en:'Thick white waxy covering on twigs.'},c:{fa:'قطع شاخه‌های آلوده و سمپاشی در مرحله‌ی پوره.',en:'Cut infested twigs and spray at the crawler stage.'}}];
+/* Products sold in Iran (checked on Iranian agri shops). Doses are left to the label on purpose. Extend with your own catalogue. */
+const PRODS=[
+{id:0,n:{fa:'روغن ولک',en:'Volck oil'},b:{fa:'تولید داخل',en:'Iranian-made'},k:{fa:'روغن معدنی باغبانی',en:'Horticultural mineral oil'},l:{fa:'روغن سبک برای سمپاشی زمستانه و همراه حشره‌کش.',en:'Light oil for winter spraying and as an insecticide adjuvant.'},
+ x:{fa:['نوع: روغن معدنی امولسیون‌شونده','کاربرد: سمپاشی زمستانه پیش از بیداری درختان، و تابستانه همراه حشره‌کش','درجه‌ی سولفوناسیون: حدود ۶۵ تا ۷۵ درصد برای زمستانه و ۸۵ تا ۹۵ درصد برای تابستانه','روی نهال و درخت جوان مقدار کمتری لازم است؛ طبق برچسب'],en:['Type: emulsifiable mineral oil','Use: winter spray before bud break, and summer spray alongside an insecticide','Sulphonation grade: about 65-75% for winter, 85-95% for summer oils','Young trees need less; follow the label']}},
+{id:1,n:{fa:'آپلاود',en:'Applaud'},b:{fa:'نیهون نوهیاکو',en:'Nihon Nohyaku'},k:{fa:'تنظیم‌کننده‌ی رشد حشرات',en:'Insect growth regulator'},l:{fa:'انتخابی و کم‌خطر برای کنه‌های شکارگر و زنبورهای انگل.',en:'Selective, gentle on predatory mites and parasitoid wasps.'},
+ x:{fa:['ماده‌ی مؤثره: بوپروفزین','سازنده: Nihon Nohyaku (ژاپن)','نحوه‌ی اثر: مهار ساخت کیتین و اختلال در پوست‌اندازی پوره‌ها','بهترین زمان: ظهور پوره‌های اولیه؛ کاهش جمعیت ممکن است حدود سه هفته طول بکشد','طبق برچسب، در هر فصل بیش از دو بار و با فاصله‌ی حداقل ۶۰ روز مصرف نشود'],en:['Active ingredient: buprofezin','Maker: Nihon Nohyaku (Japan)','Mode of action: blocks chitin synthesis and disrupts moulting of nymphs','Best timing: when young nymphs appear; population drop can take about three weeks','Per label, no more than twice per season, at least 60 days apart']}},
+{id:2,n:{fa:'آدمیرال',en:'Admiral'},b:{fa:'سومیتومو',en:'Sumitomo'},k:{fa:'تنظیم‌کننده‌ی رشد حشرات',en:'Insect growth regulator'},l:{fa:'شبه‌هورمون جوانی که مانع رشد لارو و پوره می‌شود.',en:'Juvenile-hormone mimic that stops larvae and nymphs from developing.'},
+ x:{fa:['ماده‌ی مؤثره: پیری‌پروکسی‌فن','سازنده: Sumitomo Chemical (ژاپن)؛ نمونه‌های ژنریک داخلی هم عرضه می‌شود','فرمولاسیون: مایع امولسیون‌شونده (EC ۱۰٪)','نحوه‌ی اثر: اختلال در رشد هورمونی لارو و پوره','در مناطق نوغان‌داری و پرورش کرم ابریشم توصیه نمی‌شود'],en:['Active ingredient: pyriproxyfen','Maker: Sumitomo Chemical (Japan); local generics are also sold','Formulation: emulsifiable concentrate (EC 10%)','Mode of action: disrupts hormonal development of larvae and nymphs','Not advised in silkworm-rearing areas']}},
+{id:3,n:{fa:'موونتو',en:'Movento'},b:{fa:'بایر',en:'Bayer'},k:{fa:'حشره‌کش سیستمیک',en:'Systemic insecticide'},l:{fa:'سیستمیک با حرکت دوطرفه در گیاه، برای سپردارها و شپشک‌ها.',en:'Systemic with two-way movement in the plant, for armored and soft scales.'},
+ x:{fa:['ماده‌ی مؤثره: اسپیروتترامات (گروه کتونول، اسید تترامیک)','سازنده: Bayer CropScience (آلمان)','نحوه‌ی اثر: جلوگیری از ساخت چربی در بدن حشره','در گیاه جابه‌جا می‌شود و برگ‌های تازه‌رشد را هم محافظت می‌کند','برای آبزیان خطرناک است؛ دوره‌ی کارنس طبق برچسب'],en:['Active ingredient: spirotetramat (ketoenol, tetramic acid)','Maker: Bayer CropScience (Germany)','Mode of action: blocks lipid synthesis in the insect','Moves in the plant and protects new growth','Hazardous to aquatic life; follow the label pre-harvest interval']}}];
+/* ---- keep this block identical in build.html ---- */
+const CDN='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm',MODEL='Xenova/clip-vit-base-patch32';
+let _clip=null;
+const clipLoad=onp=>_clip||(_clip=(async()=>{let st='AI library (cdn.jsdelivr.net)';
+ try{const T=await import(CDN);T.env.allowLocalModels=true;T.env.localModelPath='models/';
+  st='model settings (huggingface.co)';const proc=await T.AutoProcessor.from_pretrained(MODEL);
+  st='model file, about 90 MB (huggingface.co)';const model=await T.CLIPVisionModelWithProjection.from_pretrained(MODEL,{dtype:'q8',progress_callback:onp});
+  return{T,proc,model}}catch(e){throw new Error('failed at '+st+': '+(e&&e.message||e))}})().catch(e=>{_clip=null;throw e}));
+async function embed(blob,onp){const{T,proc,model}=await clipLoad(onp);
+ const img=await T.RawImage.fromBlob(blob),inp=await proc(img),out=await model(inp);
+ const d=Float32Array.from(out.image_embeds.data);let n=0;for(const v of d)n+=v*v;n=Math.sqrt(n)||1;return d.map(v=>v/n)}
+const keyFrom=async(pw,salt)=>{const m=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+ return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])};
+async function dec(buf,pw){buf=new Uint8Array(buf);const k=await keyFrom(pw,buf.slice(0,16));
+ const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:buf.slice(16,28)},k,buf.slice(28));return JSON.parse(new TextDecoder().decode(pt))}
+/* ---- end shared block ---- */
+
+/* reference library: unlocked by the access key, never stored in plain form */
+const BASEN=PESTS.length,b64i8=x=>{const b=atob(x),a=new Int8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a};
+let LIBX=null,RM=null,RL=null,libReady=null;
+const same=(a,b)=>{a=a.toLowerCase().trim();b=b.toLowerCase().trim();return a===b||a.startsWith(b+' ')||b.startsWith(a+' ')};
+function clearLib(){LIBX=null;RM=null;RL=null;PESTS.length=BASEN;PESTS.forEach(p=>{delete p.th;delete p.note})}
+function setLib(o){clearLib();LIBX=o;const n=o.dim||512;let tot=0;o.species.forEach(x=>tot+=x.n);
+ RM=new Float32Array(tot*n);RL=new Int32Array(tot);let r=0;
+ o.species.forEach(x=>{let pi=PESTS.findIndex((p,i)=>i<BASEN&&same(p.s,x.name));
+  if(pi<0){PESTS.push({n:{fa:x.name,en:x.name},s:x.name,d:{fa:'',en:''},c:{fa:'',en:''}});pi=PESTS.length-1}
+  PESTS[pi].th=x.th||'';PESTS[pi].note=x.info||'';
+  const q=b64i8(x.e);
+  for(let k=0;k<x.n;k++){let nn=0;for(let j=0;j<n;j++){const v=q[k*n+j]/127;RM[r*n+j]=v;nn+=v*v}nn=Math.sqrt(nn)||1;for(let j=0;j<n;j++)RM[r*n+j]/=nn;RL[r++]=pi}})}
+async function unlock(key){let miss=0;
+ for(const L of [3,2,1]){let buf;
+  try{const r=await fetch(`lib/lib${L}.enc`,{cache:'no-cache'});if(!r.ok)throw 0;buf=await r.arrayBuffer()}catch(e){miss++;continue}
+  try{setLib(await dec(buf,key));user={e:'••••'+key.slice(-4),l:L};ls.s('user',user);ls.s('key',key);return L}catch(e){}}
+ return miss===3?'nolib':0}
+
+async function detect(fs,onp,onstep){
+ if(API){const f=new FormData();fs.forEach(x=>f.append('images',x));const r=await fetch(API,{method:'POST',body:f});return r.json()}
+ if(!RM)throw new Error('lib');
+ const n=LIBX.dim||512,N=RL.length,np=PESTS.length,acc=new Float64Array(np),has=new Uint8Array(np);
+ for(let r=0;r<N;r++)has[RL[r]]=1;
+ for(let f=0;f<fs.length;f++){onstep&&onstep(f+1,fs.length);const q=await embed(fs[f],onp);
+  const top=PESTS.map(()=>[-1,-1,-1]);
+  for(let r=0;r<N;r++){let sc=0;const o=r*n;for(let j=0;j<n;j++)sc+=RM[o+j]*q[j];const b=top[RL[r]];if(sc>b[2]){b[2]=sc;b.sort((x,y)=>y-x)}}
+  top.forEach((b,i)=>{if(!has[i])return;const v=b.filter(x=>x>-1);acc[i]+=v.reduce((x,y)=>x+y,0)/v.length/fs.length})}
+ const ids=[...has.keys()].filter(i=>has[i]).sort((a,b)=>acc[b]-acc[a]),T=0.03,mx=acc[ids[0]];
+ const ex=ids.map(i=>Math.exp((acc[i]-mx)/T)),sum=ex.reduce((a,b)=>a+b,0),pc=ex.map(v=>Math.round(v/sum*100));
+ const res={i:ids[0],c:Math.max(1,pc[0]),w:acc[ids[0]]<0.7};
+ if(ids.length>1&&pc[1]>=10)res.a={i:ids[1],c:pc[1]};
+ return res}
+
+const toast=m=>{const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2400)};
+const lvl=()=>user?user.l:0,ico=(n,c='')=>`<svg class="i ${c}"><use href="#${n}"/></svg>`;
+const dt=ts=>new Date(ts).toLocaleString(lang==='fa'?'fa-IR':'en-GB',{dateStyle:'medium',timeStyle:'short'});
+const sheet=h=>{$('#sheet').innerHTML=h;$('#sheet').classList.add('on');$('#sheetBg').classList.add('on')};
+const closeSheet=()=>{$('#sheet').classList.remove('on');$('#sheetBg').classList.remove('on')};
+
+function applyLang(){const h=document.documentElement;h.lang=lang;h.dir='rtl';
+ $$('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));$$('[data-p]').forEach(e=>e.placeholder=t(e.dataset.p));
+ $('#lang').textContent=lang==='fa'?'EN':'فا';head();renderCnt();renderTip();renderRes();renderPests();renderProd();renderHist();renderMe();renderSR();ls.s('lang',lang)}
+function head(){$('#hx').innerHTML='';$('#hl').innerHTML=page==='scan'?'':((page==='pests'&&pv!=null)||(page==='prod'&&pd!=null)?'':`<h1>${t(page)}</h1>`)}
+const cartN=()=>cart.reduce((a,c)=>a+c.q,0);
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function go(p){page=p;$$('.page').forEach(e=>e.classList.toggle('on',e.id==='p-'+p));$$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.go===p));head();$('main').scrollTop=0}
+function openPest(i){pv=i;go('pests');renderPests();head()}
+function openProd(i){pd=i;go('prod');renderProd();head()}
+
+/* home: search + attach */
+const view=v=>['home','proc','res'].forEach(x=>$('#v-'+x).classList.toggle('hide',x!==v));
+function resetScan(){files.forEach(f=>URL.revokeObjectURL(f.u));files=[];result=null;$('#q').value='';renderCnt();renderSR();view('home')}
+function renderCnt(){$('#cnt').textContent=files.length?t('cnt')(files.length):'';
+ $('#thr').classList.toggle('hide',!files.length);
+ $('#thr').innerHTML=files.map((f,i)=>`<div><img src="${f.u}" alt=""><button data-rm="${i}" aria-label="remove">${ico('x')}</button></div>`).join('');
+ $('#sendBtn').disabled=!files.length&&!$('#q').value.trim();$('#locck').classList.toggle('hide',!useLoc)}
+let tipI=0;
+function renderTip(){const e=$('#tip');e.innerHTML=ico('bulb')+t('tips')[tipI%3];e.classList.toggle('hide',!!$('#q').value.trim())}
+setInterval(()=>{tipI++;renderTip()},5000);
+const CHAT='';/* optional: URL on your own server. POST {q,lang} -> {a:"one short sentence"} */
+const nz=x=>String(x).toLowerCase().replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[\u200c\s\-_.]/g,'');
+const lev=(a,b)=>{const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const u=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=u}}return d[b.length]};
+const dist=(q,n)=>Math.min(lev(q,n),lev(q,n.slice(0,q.length)))/Math.max(q.length,1);
+let srExact=true,ans='';
+const sRow=x=>`<div class="row" ${x.k==='pest'?'data-pest':'data-prod'}="${x.i}"><div class="ic">${ico(x.k==='pest'?'bug':'bottle')}</div><div class="g"><b>${x.n[lang]}</b><p${x.k==='pest'?' class="sci" style="font-size:16px"':''}>${x.s}</p></div>${ico('fwd','fl')}</div>`;
+function renderSR(){const q=nz($('#q').value),b=$('#sr');if(!q||files.length){b.innerHTML='';return}
+ const A=[...PESTS.map((p,i)=>({k:'pest',i,n:p.n,s:p.s,m:[p.n.fa,p.n.en,p.s]})),...PRODS.map(x=>({k:'prod',i:x.id,n:x.n,s:x.b[lang],m:[x.n.fa,x.n.en]}))];
+ const ex=A.filter(x=>x.m.some(y=>nz(y).includes(q)));srExact=ex.length>0;
+ const sg=ex.length?[]:A.map(x=>[Math.min(...x.m.map(y=>dist(q,nz(y)))),x]).filter(a=>a[0]<=.4).sort((a,z)=>a[0]-z[0]).slice(0,2).map(a=>a[1]);
+ b.innerHTML=(ans?`<div class="fld" style="padding:12px 18px;margin:10px 0"><p style="color:var(--tx);margin:0">${esc(ans)}</p></div>`:'')+(ex.length?ex.map(sRow).join(''):sg.length?`<p style="margin-top:14px">${t('mean')}</p>`+sg.map(sRow).join(''):(ans?'':`<p class="ctr" style="margin-top:20px">${t('none')}</p>`))}
+async function ask(q){ans='…';renderSR();try{const r=await fetch(CHAT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q,lang})});ans=String((await r.json()).a||'').trim()||t('chat_err')}catch(e){ans=t('chat_err')}renderSR()}
+function sendQ(){const q=$('#q').value.trim();if(!q)return;const r=$('#sr .row');
+ if(r&&srExact){r.click();return}
+ if(CHAT){if(!user){toast(t('need_login'));go('me');return}ask(q);return}
+ if(r)r.click()}
+$('#q').oninput=()=>{ans='';renderCnt();renderSR();renderTip()};
+$('#q').onkeydown=e=>{if(e.key==='Enter'&&!files.length)sendQ()};
+const add=l=>{for(const f of l){if(files.length>=MAX)break;if(f.type.startsWith('image/'))files.push(Object.assign(f,{u:URL.createObjectURL(f)}))}renderCnt();renderSR()};
+$('#fCam').onchange=e=>{add(e.target.files);e.target.value=''};$('#fGal').onchange=e=>{add(e.target.files);e.target.value=''};
+const getLoc=()=>new Promise(r=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>r({a:+p.coords.latitude.toFixed(4),o:+p.coords.longitude.toFixed(4)}),()=>r(null),{timeout:4000}):r(null));
+const thumb=f=>new Promise(r=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=64;const s=Math.min(im.width,im.height);c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,64,64);r(c.toDataURL('image/jpeg',.6))};im.onerror=()=>r('');im.src=f.u});
+async function analyze(){const lp=useLoc?getLoc():Promise.resolve(null);
+ view('proc');$('#scanimg').src=files[0].u;$('#bar').style.width='0';$('#stg').textContent=t('ld_model');
+ let d;
+ try{if(libReady)await libReady;
+  d=await detect(files,p=>{if(p&&p.status==='progress'&&p.progress!=null){$('#stg').textContent=t('ld_model');$('#bar').style.width=Math.round(p.progress)+'%'}},(i,n)=>{$('#stg').textContent=t('an')(i,n);$('#bar').style.width=(i/n*100)+'%'})}
+ catch(e){console.error(e);view('home');toast(t('err_ai'));return}
+ const loc=await lp;result={...d,loc};
+ hist.unshift({ts:Date.now(),i:d.i,c:d.c,loc,th:await thumb(files[0])});hist=hist.slice(0,50);ls.s('hist',hist);
+ view('res');renderRes();renderHist();$('main').scrollTop=0}
+const prodsFor=i=>{const it=lib.items.find(x=>x.i===i);return it?it.prods:[0,1,3]};
+function pestDetail(i){const p=PESTS[i],it=lib.items.find(x=>x.i===i);let h=`<p style="color:var(--tx)">${p.c[lang]}</p>`;
+ if(p.note)h+=`<h3>${t('notes')}</h3><p style="color:var(--tx);white-space:pre-line">${esc(p.note)}</p>`;
+ if(it)h+=`<h3>${t('life')}</h3><p style="color:var(--tx)">${it.life[lang]}</p><h3>${t('enemy')}</h3><p style="color:var(--tx)">${it.enemy[lang]}</p><h3>${t('ctl')}</h3><ul>${it.ctl[lang].map(x=>`<li>${x}</li>`).join('')}</ul>`;
+ return h}
+function medsBlock(i){return `<h3>${t('rel')}</h3>`+prodsFor(i).map(id=>`<div class="row" data-prod="${id}"><div class="g"><b>${PRODS[id].n[lang]}</b><p>${PRODS[id].k[lang]}</p></div><button class="rb d" data-ord="${id}" aria-label="add" style="width:34px;height:34px">${ico('plus')}</button></div>`).join('')+`<button class="btn" data-addall="${i}">${t('add_all')}</button><p class="note">${t('lab')}</p>`}
+function addAll(i){if(needLogin())return;prodsFor(i).forEach(id=>{const c=cart.find(x=>x.id===id);c?c.q++:cart.push({id,q:1})});ls.s('cart',cart);head();renderMe();renderProd();toast(t('add_ok'))}
+function renderRes(){if(!result||!PESTS[result.i])return;const p=PESTS[result.i];
+ $('#res').innerHTML=`<div style="padding-top:12px"><button class="lk" data-act="new" style="display:flex;align-items:center;gap:4px;padding:6px 0">${ico('back','fl')}${t('scan')}</button><p style="margin:14px 0 0">${t('conf')} ${result.c}%</p><h2 style="font-size:26px">${p.n[lang]}</h2><p class="sci">${p.s}</p><p style="margin-top:10px">${p.d[lang]}</p>${result.w?`<p style="color:#c0392b">${t('lowc')}</p>`:''}${result.a&&PESTS[result.a.i]?`<p>${t('alt')}: ${PESTS[result.a.i].n[lang]} (${result.a.c}%)</p>`:''}${pestDetail(result.i)}${medsBlock(result.i)}<p class="note ctr">${t('demo')}</p><div class="ctr"><button class="lk" data-act="share">${t('send')}</button></div></div>`}
+
+/* pests: list + one-line summary for everyone; full details need an account */
+const LOCK=`<div class="lockv" style="padding:36px 10px">${ico('lock')}<p style="margin-top:8px">${t('unlock')}</p><button class="btn" data-go="me" style="max-width:240px;margin:14px auto 0">${t('l_in')}</button></div>`;
+const backBtn=l=>`<button class="lk" data-act="back" style="display:flex;align-items:center;gap:4px;padding:6px 0">${ico('back','fl')}${l}</button>`;
+const pic=(src,sym,cls='')=>`<div class="im ${cls}">${ico(sym)}<img src="${src}" alt="" onerror="this.remove()"></div>`;
+const moreBtn=f=>`<div class="ctr" style="margin-top:18px">${f&&user?`<p>${t('more_msg')}</p>`:`<button class="btn o" data-act="more">${t('more')}</button>`}</div>`;
+function renderPests(){const b=$('#pestBox');
+ if(pv==null){b.innerHTML=`<div class="grid2">${(moreP&&user?PESTS:PESTS.slice(0,3)).map((p,i)=>`<div class="pc" data-pest="${i}">${pic(p.th||'samples/'+i+'.jpg','bug')}<div class="tx"><b>${p.n[lang]}</b><span class="sci" style="font-size:15px">${p.s}</span></div></div>`).join('')}</div>${moreBtn(moreP)}`;return}
+ const p=PESTS[pv],it=lib.items.find(x=>x.i===pv);
+ let h=backBtn(t('pests'))+pic(p.th||'samples/'+pv+'.jpg','bug','hero')+`<h2 style="font-size:26px">${p.n[lang]}</h2><p class="sci">${p.s}</p><p style="margin-top:8px">${p.d[lang]}</p><p style="color:var(--tx)">${p.c[lang]}</p>`;
+ if(!user)h+=LOCK;else{if(p.note)h+=`<h3>${t('notes')}</h3><p style="color:var(--tx);white-space:pre-line">${esc(p.note)}</p>`;
+  if(it){h+=`<h3>${t('life')}</h3><p style="color:var(--tx)">${it.life[lang]}</p><h3>${t('enemy')}</h3>`+`<p style="color:var(--tx)">${it.enemy[lang]}</p>`+
+  `<h3>${t('ctl')}</h3><ul>${it.ctl[lang].map(x=>`<li>${x}</li>`).join('')}</ul><h3>${t('rel')}</h3><div class="chips">${it.prods.map(id=>`<button class="chip" data-prod="${id}" style="color:var(--tx)">${PRODS[id].n[lang]}</button>`).join('')}</div>`}}
+ b.innerHTML=h}
+
+/* products: cards with order button, names only (no pest grouping); full details need an account */
+function cartBox(){const on=user&&cart.length;return `<h3 class="sh">${t('cart')}</h3><div style="background:var(--fl);border-radius:18px;padding:4px 14px 14px">`+(on?cart.map(c=>`<div class="row" style="cursor:default"><div class="g"><b>${PRODS[c.id].n[lang]}</b></div><button class="chip" data-cq="${c.id},-1">−</button><b>${c.q}</b><button class="chip" data-cq="${c.id},1">+</button><button data-cd="${c.id}" style="color:var(--mu)">${ico('x')}</button></div>`).join(''):`<p style="padding:14px 0;text-align:center">${t('cart_empty')}</p>`)+`<button class="btn" data-sub="1"${on?'':' disabled'}>${t('submit')}</button></div>`}
+function renderProd(){const b=$('#prodBox');
+ if(pd==null){b.innerHTML=cartBox()+`<h3 class="sh">${t('meds')}</h3><div class="grid2">${(moreD&&user?PRODS:PRODS.slice(0,4)).map(x=>`<div class="pc" data-prod="${x.id}">${pic('products/'+x.id+'.jpg','bottle')}<div class="tx"><b>${x.n[lang]}</b><span class="mu">${x.b[lang]}</span><span class="mu">${x.k[lang]}</span></div><button class="rb d" data-ord="${x.id}" aria-label="add" style="align-self:center;margin:0 10px">${ico('plus')}</button></div>`).join('')}</div>${moreBtn(moreD)}`;return}
+ const x=PRODS[pd];
+ b.innerHTML=backBtn(t('prod'))+pic('products/'+x.id+'.jpg','bottle','hero')+`<h2 style="font-size:26px">${x.n[lang]}</h2><p>${x.b[lang]} · ${x.k[lang]}</p><p style="color:var(--tx);margin-top:8px">${x.l[lang]}</p><button class="btn" data-ord="${x.id}">${t('ord')}</button>`+
+ (user?`<h3></h3>${x.x[lang].map(l=>`<p style="color:var(--tx)">• ${l}</p>`).join('')}<p class="note">${t('lab')}</p>`:LOCK)}
+function needLogin(){if(user)return false;toast(t('ord_login'));go('me');return true}
+function addCart(id){if(needLogin())return;const c=cart.find(x=>x.id===id);c?c.q++:cart.push({id,q:1});ls.s('cart',cart);head();renderMe();renderProd();toast(t('add_ok'))}
+function submitCart(){if(!cart.length)return;orders.unshift(...cart.map(c=>({id:c.id,q:c.q,nm:cn,ph:cp,ts:Date.now()})));ls.s('ord',orders);cart=[];ls.s('cart',cart);head();renderMe();renderProd();toast(t('ord_ok'))}
+
+/* activity tab: history, spray reminders and orders as stacked sections */
+function renderHist(){const b=$('#histBox'),today=new Date().toISOString().slice(0,10);
+ const hs=!hist.length?`<p>${t('h_empty')}</p>`:hist.map((h,k)=>!PESTS[h.i]?'':`<div class="row" data-pest="${h.i}"><img class="t" src="${h.th}" alt=""><div class="g"><b>${PESTS[h.i].n[lang]}</b><p>${dt(h.ts)} · ${h.c}%</p></div>${h.loc?`<a class="lk" onclick="event.stopPropagation()" href="https://maps.google.com/?q=${h.loc.a},${h.loc.o}" target="_blank" rel="noopener">${ico('pin')}</a>`:''}<button data-dh="${k}" style="color:var(--mu)">${ico('x')}</button></div>`).join('')+`<button class="lk" data-act="hclr" style="margin-top:6px">${t('h_clear')}</button>`;
+ const rs=`<p>${t('rm_p')}</p><input type="date" id="rd"><input id="rn" placeholder="${t('rm_n')}"><button class="btn" data-act="radd">${t('rm_add')}</button>`+[...rems].sort((a,z)=>a.d>z.d?1:-1).map(r=>`<div class="row" style="cursor:default"><div class="g"><b class="${r.d<today?'late':''}">${r.d}</b><p>${r.n}</p></div><button data-dr="${r.id}" style="color:var(--mu)">${ico('x')}</button></div>`).join('');
+ b.innerHTML=`<h3 class="sh">${t('hist_l')}</h3>${hs}<h3 class="sh">${t('rm')}</h3>${rs}`}
+
+/* profile: access key, cart, orders, about */
+function renderMe(){const b=$('#meBox');
+ let h=user?`<div class="row" style="cursor:default"><div class="ic">${ico('user')}</div><div class="g"><b>${user.e}</b><p>${t('r'+user.l)}</p></div><button class="lk" data-act="logout">${t('l_out')}</button></div>`
+ :`<p>${t('l_why')}</p><input id="kk" dir="ltr" autocomplete="off" placeholder="${t('l_key')}" style="text-align:center;letter-spacing:2px"><button class="btn" data-act="login">${t('l_in')}</button>`;
+ b.innerHTML=h+`<p style="margin-top:24px">${t('a_p')} · v0.5</p>`}
+document.addEventListener('input',e=>{if(e.target.id==='cn')cn=e.target.value;if(e.target.id==='cp')cp=e.target.value});
+
+/* one delegated click handler */
+document.addEventListener('click',e=>{const q=s=>e.target.closest(s);let x;
+ if(!q('.pw'))$('#addMenu').classList.add('hide');
+ if(x=q('[data-go]')){if(x.dataset.go==='scan'&&!$('#v-res').classList.contains('hide'))resetScan();if(x.dataset.go===page){pv=null;pd=null}go(x.dataset.go);renderPests();renderProd();head();return}
+ if(x=q('[data-ord]')){addCart(+x.dataset.ord);return}
+ if(x=q('[data-addall]')){addAll(+x.dataset.addall);return}
+ if(x=q('[data-cq]')){const[id,d]=x.dataset.cq.split(',').map(Number),c=cart.find(z=>z.id===id);c.q+=d;if(c.q<1)cart=cart.filter(z=>z.id!==id);ls.s('cart',cart);head();renderMe();renderProd();return}
+ if(x=q('[data-cd]')){cart=cart.filter(z=>z.id!=x.dataset.cd);ls.s('cart',cart);head();renderMe();renderProd();return}
+ if(x=q('[data-dh]')){e.stopPropagation();hist.splice(x.dataset.dh,1);ls.s('hist',hist);renderHist();return}
+ if(x=q('[data-pest]')){openPest(+x.dataset.pest);return}
+ if(x=q('[data-prod]')){openProd(+x.dataset.prod);return}
+ if(x=q('[data-sub]')){submitCart();return}
+ if(x=q('[data-rm]')){URL.revokeObjectURL(files[x.dataset.rm].u);files.splice(x.dataset.rm,1);renderCnt();renderSR();return}
+ if(x=q('[data-dr]')){rems=rems.filter(r=>r.id!=x.dataset.dr);ls.s('rem',rems);renderHist();return}
+ if(x=q('[data-af]')){af=x.dataset.af;renderHist();return}
+ if(q('#sheetBg')){closeSheet();return}
+ if(!(x=q('[data-act]')))return;
+ ({plus:()=>$('#addMenu').classList.toggle('hide'),
+ cam:()=>{$('#addMenu').classList.add('hide');$('#fCam').click()},gal:()=>{$('#addMenu').classList.add('hide');$('#fGal').click()},
+ loc:()=>{useLoc=!useLoc;renderCnt()},go:()=>{if(files.length){if(!user){toast(t('need_login'));go('me');return}analyze()}else sendQ()},
+ new:resetScan,
+ share:async()=>{const p=PESTS[result.i],s=`CoccoBye: ${p.n[lang]} (${p.s}) ${result.c}%`+(result.loc?` https://maps.google.com/?q=${result.loc.a},${result.loc.o}`:'');if(navigator.share){try{await navigator.share({title:'CoccoBye',text:s})}catch(_){}}else location.href='mailto:?subject=CoccoBye&body='+encodeURIComponent(s)},
+ cart:()=>{if(needLogin())return;go('me');renderMe();setTimeout(()=>{const e=$('#cartSec');if(e)e.scrollIntoView()},60)},
+ more:()=>{if(!user){toast(t('more_login'));go('me');return}if(page==='prod'){moreD=true;renderProd()}else{moreP=true;renderPests()}},
+ back:()=>{if(page==='prod'){pd=null;renderProd()}else{pv=null;renderPests()}head()},lang:()=>{lang=lang==='fa'?'en':'fa';applyLang()},
+ hclr:()=>{hist=[];ls.s('hist',hist);renderHist()},
+ login:async()=>{const k=$('#kk').value.trim();if(k.length<6)return toast(t('l_bad'));toast(t('chk'));const r=await unlock(k);if(r==='nolib')return toast(t('l_nolib'));if(!r)return toast(t('l_bad'));applyLang()},
+ logout:()=>{user=null;moreP=moreD=false;clearLib();result=null;ls.s('user',null);ls.s('key',null);view('home');applyLang()},
+ radd:()=>{const d=$('#rd').value;if(!d)return;rems.push({id:Date.now(),d,n:$('#rn').value.trim()});ls.s('rem',rems);renderHist()},
+ edit:()=>toast('Server needed')}[x.dataset.act]||(()=>{}))()});
+
+go('scan');applyLang();
+{const k=ls.g('key',null);if(user&&k){libReady=unlock(k).then(r=>{libReady=null;if(r===0){user=null;ls.s('user',null);ls.s('key',null)}applyLang()})}else if(user){user=null;ls.s('user',null);applyLang()}}
+setTimeout(()=>{$('#splash').style.opacity=0;setTimeout(()=>$('#splash').remove(),550)},2400);
+</script>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
+</body>
+</html>

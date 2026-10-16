@@ -1,0 +1,33 @@
+{
+ "name": "CoccoBye",
+ "short_name": "CoccoBye",
+ "description": "تشخیص آفات مرکبات از روی عکس",
+ "lang": "fa",
+ "dir": "rtl",
+ "start_url": "app.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "theme_color": "#0E3B2C",
+ "background_color": "#0E3B2C",
+ "icons": [
+  {
+   "src": "icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
